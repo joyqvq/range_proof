@@ -92,13 +92,14 @@ impl RangeProof {
 mod test {
     use super::*;
 
+    use ark_serialize::CanonicalSerialize;
     use merlin::Transcript;
 
     use crate::commitment_scheme::trusted_setup;
 
     #[test]
     fn test_prove() {
-        let n = 8usize;
+        let n = 64usize;
         let (pk, _vk) = trusted_setup(4usize * n).unwrap();
 
         let mut transcript = Transcript::new(b"range_proof");
@@ -107,7 +108,17 @@ mod test {
         let z = Fr::from(100u8);
 
         // get proof
-        let _range_proof = RangeProof::prove(&pk, n, &z, &mut transcript);
+        let range_proof = RangeProof::prove(&pk, n, &z, &mut transcript);
+        let mut bytes = Vec::new();
+        let _ = range_proof.aggregate_witness_commitment.serialize_uncompressed(&mut bytes);
+        let _ = range_proof.shifted_witness_commitment.serialize_uncompressed(&mut bytes);
+        let _ = range_proof.evaluations.g.serialize_uncompressed(&mut bytes);
+        let _ = range_proof.evaluations.g_omega.serialize_uncompressed(&mut bytes);
+        let _ = range_proof.evaluations.w_cap.serialize_uncompressed(&mut bytes);
+        let _ = range_proof.commitments.f.serialize_uncompressed(&mut bytes);
+        let _ = range_proof.commitments.g.serialize_uncompressed(&mut bytes);
+        let _ = range_proof.commitments.q.serialize_uncompressed(&mut bytes);
+        println!("bytes: {:?}", bytes.len());
     }
 
     #[test]
