@@ -25,3 +25,7 @@ rand_chacha = "0.2"
 rand_core = "0.5.1"
 ark-std = "0.4.0"
 ark-serialize = "0.4.1"
+
+[[bench]]
+name = "range_proof"
+harness = false

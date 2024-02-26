@@ -10,7 +10,9 @@ mod range_proof_benches {
     use range_proof::{commitment_scheme, range_proof::RangeProof};
 
     fn proof(c: &mut Criterion) {
-        let n = 8usize;
+        let n = 32usize;
+        // let n = 64usize;
+
         let (pk, _vk) = commitment_scheme::trusted_setup(4usize * n).unwrap();
         let z = Fr::from(100u8);
         let mut proof_transcript = Transcript::new(b"range_proof");
@@ -20,7 +22,8 @@ mod range_proof_benches {
     }
 
     fn verify(c: &mut Criterion) {
-        let n = 8usize;
+        let n = 32usize;
+        // let n = 64usize;
         let (pk, vk) = commitment_scheme::trusted_setup(4usize * n).unwrap();
         let z = Fr::from(100u8);
         let mut verification_transcript = Transcript::new(b"range_proof");
